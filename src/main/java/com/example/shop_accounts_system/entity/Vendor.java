@@ -1,11 +1,14 @@
 package com.example.shop_accounts_system.entity;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.example.shop_accounts_system.dto.AddVendorRequest;
 
@@ -25,7 +28,7 @@ public class Vendor {
     private int id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shop_Id", referencedColumnName = "id")
+    @JoinColumn(name = "shop_id", referencedColumnName = "id")
     private Shop shop;
 
     // private String shopId;
@@ -35,9 +38,14 @@ public class Vendor {
     private String phoneNumber;
     private String due;
 
-    public static Vendor toEntity(AddVendorRequest addVendorRequest){
+    @OneToMany (mappedBy = "vendor")
+    private List<Purchase> purchase;
+
+
+    public static Vendor toEntity(AddVendorRequest addVendorRequest, Shop shop){
         Vendor vendor = new Vendor();
         vendor.setName(addVendorRequest.getName());
+        vendor.setShop(shop);
         vendor.setAddress(addVendorRequest.getAddress());
         vendor.setCnic(addVendorRequest.getCnic());
         vendor.setPhoneNumber(addVendorRequest.getPhoneNumber());

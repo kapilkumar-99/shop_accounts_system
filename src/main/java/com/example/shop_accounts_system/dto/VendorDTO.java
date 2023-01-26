@@ -1,5 +1,6 @@
 package com.example.shop_accounts_system.dto;
 
+
 import com.example.shop_accounts_system.entity.Vendor;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class VendorDTO {
     public static VendorDTO fromEntity(Vendor vendor){
         VendorDTO vendorDTO = new VendorDTO();
         vendorDTO.setId(vendor.getId());
+        vendorDTO.setShopId(vendor.getShop().getId());
         vendorDTO.setName(vendor.getName());
         vendorDTO.setAddress(vendor.getAddress());
         vendorDTO.setCnic(vendor.getCnic());

@@ -29,7 +29,7 @@ public class VendorService {
         if(shop.isPresent()){
             Vendor shopId = new Vendor();
             shopId.setShop(shop.get());
-            Vendor vendor = Vendor.toEntity(addVendorRequest);
+            Vendor vendor = Vendor.toEntity(addVendorRequest, shop.get());
             Vendor newVendor = vendorRepository.save(vendor);
             return VendorDTO.fromEntity(newVendor);
         }
