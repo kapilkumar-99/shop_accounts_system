@@ -15,7 +15,7 @@ public class AddVendorRequest {
     private String address;
     private String cnic;
     private String phoneNumber;
-    private String due;
+    private int due;
 
     public void setShop(int shopId){
         this.shopId = shopId;

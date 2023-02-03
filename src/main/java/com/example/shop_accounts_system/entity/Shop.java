@@ -37,6 +37,9 @@ public class Shop {
     @OneToMany (mappedBy = "shop")
     private List<Purchase> purchase;
 
+    @OneToMany (mappedBy = "shop")
+    private List<Sell> sell;
+
     public static Shop toEntity(AddShopRequest addShopRequest){
         Shop shop = new Shop();
         shop.setName(addShopRequest.getName());

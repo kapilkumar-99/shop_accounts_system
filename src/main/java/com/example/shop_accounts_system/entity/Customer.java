@@ -1,11 +1,14 @@
 package com.example.shop_accounts_system.entity;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.example.shop_accounts_system.dto.AddCustomerRequest;
 
@@ -26,11 +29,17 @@ public class Customer {
     @JoinColumn(name = "shop_Id", referencedColumnName = "id")
     private Shop shop;
 
+    @OneToMany(mappedBy = "customer")
+    private List<Sell> sell;
+
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerDue> customerDue;
+
     private String name;
     private String address;
     private String cnic;
     private String phoneNumber;
-    private String dues;
+    private int dues;
 
     public static Customer toEntity(AddCustomerRequest addCustomerRequest, Shop shop){
         Customer customer = new Customer();

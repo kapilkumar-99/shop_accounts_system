@@ -19,7 +19,7 @@ public class VendorDTO {
     private String address;
     private String cnic;
     private String phoneNumber;
-    private String due;
+    private int due;
 
     public static VendorDTO fromEntity(Vendor vendor){
         VendorDTO vendorDTO = new VendorDTO();

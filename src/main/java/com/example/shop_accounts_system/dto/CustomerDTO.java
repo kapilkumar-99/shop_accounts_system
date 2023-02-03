@@ -18,7 +18,7 @@ public class CustomerDTO {
     private String address;
     private String cnic;
     private String phoneNumber;
-    private String dues;
+    private int dues;
     
 
     public static CustomerDTO fromEntity(Customer customer){

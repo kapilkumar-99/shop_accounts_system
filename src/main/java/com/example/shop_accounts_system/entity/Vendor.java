@@ -31,15 +31,17 @@ public class Vendor {
     @JoinColumn(name = "shop_id", referencedColumnName = "id")
     private Shop shop;
 
-    // private String shopId;
     private String name;
     private String address;
     private String cnic;
     private String phoneNumber;
-    private String due;
+    private int due;
 
     @OneToMany (mappedBy = "vendor")
     private List<Purchase> purchase;
+
+    @OneToMany(mappedBy = "vendor")
+    private List<VendorDue> vendorDues;
 
 
     public static Vendor toEntity(AddVendorRequest addVendorRequest, Shop shop){

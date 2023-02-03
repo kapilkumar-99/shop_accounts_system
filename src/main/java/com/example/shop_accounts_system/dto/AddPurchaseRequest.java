@@ -16,14 +16,4 @@ public class AddPurchaseRequest {
     private int itemQuantity;
     private int dueAmount;
     private int totalAmount;
-
-    public void setShop(int shopId){
-        this.shopId = shopId;
-    }
-    public void setVendor(int vendorId){
-        this.shopId = vendorId;
-    }
-    public void setProduct(int productId){
-        this.productId = productId;
-    }
 }

@@ -30,6 +30,9 @@ public class Product {
     @OneToMany (mappedBy = "product")
     private List<Purchase> purchase;
 
+    @OneToMany(mappedBy = "product")
+    private List<Sell> sell;
+
     public static Product toEntity(AddProductRequest addProductRequest){
         Product product = new Product();
         product.setName(addProductRequest.getName());

@@ -1,9 +1,13 @@
 package com.example.shop_accounts_system.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.shop_accounts_system.dto.AddShopRequest;
+import com.example.shop_accounts_system.dto.GetShopResponse;
 import com.example.shop_accounts_system.dto.ShopDTO;
 import com.example.shop_accounts_system.dto.UpdateShopRequest;
 import com.example.shop_accounts_system.entity.Shop;
@@ -44,5 +48,28 @@ public class ShopService {
         Shop updatedShop = shopRepository.save(existingShop);
 
         return ShopDTO.fromEntity(updatedShop);
+    }
+
+    public GetShopResponse getShopById(String id) throws Exception{
+        Shop shop = shopRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Shop was not found with id "+id));
+       GetShopResponse getShop = new GetShopResponse(shop.getId(), shop.getAddress(), shop.getName(), shop.getPhoneNumber());
+       return getShop;
+    }
+
+    public List<GetShopResponse> findAllShop(){
+        List<Shop> shops = (List<Shop>) shopRepository.findAll();
+        List<GetShopResponse> allShops = new ArrayList<>();
+        for(Shop shop: shops){
+            GetShopResponse getShopsResponse = new GetShopResponse(shop.getId(), shop.getName(), shop.getAddress(), shop.getPhoneNumber());
+            allShops.add(getShopsResponse);
+        }
+        return allShops;
+    }
+
+    public void shopDeleteById(String id) throws Exception{
+        Shop shop = shopRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Shop was not found with id "+id));
+        shopRepository.deleteById(Integer.parseInt(id));
+        throw new Exception("Shop was sucessfully delete with id "+id);
+        // return "deleted sucessfully with id "+id;
     }
 }
