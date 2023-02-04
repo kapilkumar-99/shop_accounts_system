@@ -18,6 +18,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
         return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({DeleteException.class})
+    public ResponseEntity<ErrorResponse> handleDeletedException(DeleteException e){
+        e.printStackTrace();
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+    }
+
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e) {
         e.printStackTrace();
@@ -29,6 +35,5 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
         e.printStackTrace();
         return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
-
 
 }

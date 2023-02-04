@@ -13,6 +13,7 @@ import com.example.shop_accounts_system.dto.UpdateCustomerRequest;
 import com.example.shop_accounts_system.entity.Customer;
 import com.example.shop_accounts_system.entity.Shop;
 import com.example.shop_accounts_system.exception_handling.NotFoundException;
+import com.example.shop_accounts_system.exception_handling.DeleteException;
 import com.example.shop_accounts_system.repository.CustomerRespository;
 import com.example.shop_accounts_system.repository.ShopRepository;
 
@@ -57,8 +58,6 @@ public class CustomerService {
 
         Customer updateCustomer = customerRespository.save(existingCustomer);
 
-        // Customer updatedCustomer = vendorRepository.save(existingCustomer);
-
         return CustomerDTO.fromEntity(updateCustomer);
     }
 
@@ -81,7 +80,7 @@ public class CustomerService {
     public void customerDeleteById(String id) throws Exception{
         Customer customer = customerRespository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Customer was not found with id "+id));
         customerRespository.deleteById(Integer.parseInt(id));
-        throw new Exception("Customer was sucessfully delete with id "+id);
+        throw new DeleteException("Customer was sucessfully delete with id "+id);
         // return "deleted sucessfully with id "+id;
     }
 

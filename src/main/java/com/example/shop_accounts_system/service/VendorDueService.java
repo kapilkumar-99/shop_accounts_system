@@ -51,25 +51,30 @@ public class VendorDueService {
         return VendorDueDTO.fromEntity(newVendorDue);
     }
 
-    public VendorDueDTO updateVendorDue(String vendorDueId, UpdateVendorDueRequest request) throws Exception {
-        VendorDue existingVendorDue = vendorDueRepository.findById(Integer.parseInt(vendorDueId))
-                                        .orElseThrow(()->new NotFoundException("Invalid vendor due id"));
+    public VendorDueDTO updateVendorDue(String vendorId, UpdateVendorDueRequest request) throws Exception {
         Account account = accountRepository.findById(request.getAccountId())
-                                        .orElseThrow(()-> new Exception("Account was not fount with id"+ request.getAccountId()));
-       
-        account.setBalance(account.getBalance()-request.getDueClearAmount());
-        accountRepository.save(account);
+                                        .orElseThrow(()-> new Exception("Account was not found with id "+ request.getAccountId()));
+        
+        try {
+            VendorDue existingVendorDue = vendorDueRepository.findByVendorId(Integer.parseInt(vendorId));
+            // VendorDue existingVendorDue = vendorDueRepository.findByVendorId(Integer.parseInt(vendorId));
 
-        if(request.getDueClearAmount() > 0) {
-            existingVendorDue.setDueClearAmount(request.getDueClearAmount());
+            account.setBalance(account.getBalance()-request.getDueClearAmount());
+            accountRepository.save(account);
+
+            if(request.getDueClearAmount() > 0) {
+                existingVendorDue.setDueClearAmount(request.getDueClearAmount());
+            }
+            if(request.getDate() != null) {
+                existingVendorDue.setDate(request.getDate());
+            }
+
+            VendorDue updatedVendorDue = vendorDueRepository.save(existingVendorDue);
+
+            return VendorDueDTO.fromEntity(updatedVendorDue);
+        } catch (Exception e) {
+            throw new Exception("Vendor was not found with id "+vendorId);
         }
-        if(request.getDate() != null) {
-            existingVendorDue.setDate(request.getDate());
-        }
-
-        VendorDue updatedVendorDue = vendorDueRepository.save(existingVendorDue);
-
-        return VendorDueDTO.fromEntity(updatedVendorDue);
     }
 
     public GetVendorDueResponse getVendorDueById(String id) throws Exception{

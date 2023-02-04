@@ -47,24 +47,28 @@ public class CustomerDueService {
         return CustomerDueDTO.fromEntity(newCustomerDue);
     }
 
-    public CustomerDueDTO updateCustomerDue(String cusomerDueId, UpdateCustomerDueRequest request) throws Exception {
-        CustomerDue existingCustomerDue = customerDueRepository.findById(Integer.parseInt(cusomerDueId))
-                                        .orElseThrow(()->new NotFoundException("Invalid customer due id"));
+    public CustomerDueDTO updateCustomerDue(String customerId, UpdateCustomerDueRequest request) throws Exception {
         Account account = accountRepository.findById(request.getAccountId())
-                                        .orElseThrow(()-> new Exception("Account was not fount with id"+ request.getAccountId())); 
-        account.setBalance(account.getBalance()+request.getDueClearAmount());
-        accountRepository.save(account);                                
-                                        
-        if(request.getDueClearAmount() > 0) {
+                                            .orElseThrow(()-> new Exception("Account was not found with id "+ request.getAccountId())); 
+
+        try {
+            CustomerDue existingCustomerDue = customerDueRepository.findByCustomerId(Integer.parseInt(customerId));
+            account.setBalance(account.getBalance()+request.getDueClearAmount());
+            accountRepository.save(account);                                
+                
+            if(request.getDueClearAmount() > 0) {
             existingCustomerDue.setDueClearAmount(request.getDueClearAmount());
-        }
-        if(request.getDate() != null) {
+            }
+            if(request.getDate() != null) {
             existingCustomerDue.setDate(request.getDate());
+            }
+            CustomerDue updatedCustomerDue = customerDueRepository.save(existingCustomerDue);
+
+            return CustomerDueDTO.fromEntity(updatedCustomerDue);
+            
+        } catch (Exception e) {
+            throw new Exception("Customer was not found with id "+customerId);
         }
-
-        CustomerDue updatedCustomerDue = customerDueRepository.save(existingCustomerDue);
-
-        return CustomerDueDTO.fromEntity(updatedCustomerDue);
     }
 
 

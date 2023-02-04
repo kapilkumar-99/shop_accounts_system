@@ -12,6 +12,7 @@ import com.example.shop_accounts_system.dto.ShopDTO;
 import com.example.shop_accounts_system.dto.UpdateShopRequest;
 import com.example.shop_accounts_system.entity.Shop;
 import com.example.shop_accounts_system.exception_handling.NotFoundException;
+import com.example.shop_accounts_system.exception_handling.DeleteException;
 import com.example.shop_accounts_system.repository.ShopRepository;
 
 @Service
@@ -69,7 +70,6 @@ public class ShopService {
     public void shopDeleteById(String id) throws Exception{
         Shop shop = shopRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Shop was not found with id "+id));
         shopRepository.deleteById(Integer.parseInt(id));
-        throw new Exception("Shop was sucessfully delete with id "+id);
-        // return "deleted sucessfully with id "+id;
+        throw new DeleteException("Shop was sucessfully delete with id "+id);
     }
 }

@@ -12,6 +12,7 @@ import com.example.shop_accounts_system.dto.ProductDTO;
 import com.example.shop_accounts_system.dto.UpdateProductRequest;
 import com.example.shop_accounts_system.entity.Product;
 import com.example.shop_accounts_system.exception_handling.NotFoundException;
+import com.example.shop_accounts_system.exception_handling.DeleteException;
 import com.example.shop_accounts_system.repository.ProductRepository;
 import com.example.shop_accounts_system.repository.PurchaseRepository;
 
@@ -67,7 +68,6 @@ public class ProductService {
     public void ProductDeleteById(String id) throws Exception{
         Product product = productRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Product was not found with id "+id));
         productRepository.deleteById(Integer.parseInt(id));
-        throw new Exception("Product was sucessfully delete with id "+id);
-        // return "deleted sucessfully with id "+id;
+        throw new DeleteException("Product was sucessfully delete with id "+id);
     }
 }

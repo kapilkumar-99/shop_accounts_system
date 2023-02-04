@@ -12,6 +12,7 @@ import com.example.shop_accounts_system.dto.StaffDTO;
 import com.example.shop_accounts_system.dto.UpdateStaffRequest;
 import com.example.shop_accounts_system.entity.Staff;
 import com.example.shop_accounts_system.exception_handling.NotFoundException;
+import com.example.shop_accounts_system.exception_handling.DeleteException;
 import com.example.shop_accounts_system.repository.StaffRepository;
 
 @Service
@@ -65,7 +66,6 @@ public class StaffService {
     public void staffDeleteById(String id) throws Exception{
         Staff staff = staffRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Staff was not found with id "+id));
         staffRepository.deleteById(Integer.parseInt(id));
-        throw new Exception("Shop was sucessfully delete with id "+id);
-        // return "deleted sucessfully with id "+id;
+        throw new DeleteException("Staff was sucessfully delete with id "+id);
     }
 }

@@ -12,6 +12,7 @@ import com.example.shop_accounts_system.dto.GetAccountResponse;
 import com.example.shop_accounts_system.dto.UpdateAccountRequest;
 import com.example.shop_accounts_system.entity.Account;
 import com.example.shop_accounts_system.exception_handling.NotFoundException;
+import com.example.shop_accounts_system.exception_handling.DeleteException;
 import com.example.shop_accounts_system.repository.AccountRepository;
 
 @Service
@@ -41,7 +42,7 @@ public class AccountService {
     }
 
     public GetAccountResponse getAccountById(String id) throws Exception{
-        Account account = accountRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Account was not found with id "+id));
+        Account account = accountRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new NotFoundException("Account was not found with id "+id));
        GetAccountResponse getAccount = new GetAccountResponse(account.getId(), account.getBankName(), account.getBalance());
        return getAccount;
     }
@@ -59,7 +60,6 @@ public class AccountService {
     public void accountDeleteById(String id) throws Exception{
         Account account = accountRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Account was not found with id "+id));
         accountRepository.deleteById(Integer.parseInt(id));
-        throw new Exception("Account was sucessfully delete with id "+id);
-        // return "deleted sucessfully with id "+id;
+        throw new DeleteException("Account was sucessfully delete with id "+id);
     }
 }

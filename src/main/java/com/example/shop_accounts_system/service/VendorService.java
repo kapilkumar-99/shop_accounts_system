@@ -13,6 +13,7 @@ import com.example.shop_accounts_system.dto.VendorDTO;
 import com.example.shop_accounts_system.entity.Shop;
 import com.example.shop_accounts_system.entity.Vendor;
 import com.example.shop_accounts_system.exception_handling.NotFoundException;
+import com.example.shop_accounts_system.exception_handling.DeleteException;
 import com.example.shop_accounts_system.repository.ShopRepository;
 import com.example.shop_accounts_system.repository.VendorRepository;
 
@@ -82,8 +83,7 @@ public class VendorService {
     public void vendorDeleteById(String id) throws Exception{
         Vendor vendor = vendorRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Vendor was not found with id "+id));
         vendorRepository.deleteById(Integer.parseInt(id));
-        throw new Exception("Vendor was sucessfully delete with id "+id);
-        // return "deleted sucessfully with id "+id;
+        throw new DeleteException("Vendor was sucessfully delete with id "+id);
     }
     
 }
