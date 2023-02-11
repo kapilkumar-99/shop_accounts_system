@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shop_accounts_system.dto.AddStaffRequest;
 import com.example.shop_accounts_system.dto.GetStaffResponse;
@@ -20,6 +21,7 @@ public class StaffService {
     
     @Autowired
     StaffRepository staffRepository;
+
 
     public StaffDTO addStaff(AddStaffRequest addStaffRequest){
         Staff staff = Staff.toEntity(addStaffRequest);

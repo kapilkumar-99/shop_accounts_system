@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shop_accounts_system.dto.AddVendorDueRequest;
 import com.example.shop_accounts_system.dto.GetVendorDueResponse;
@@ -13,7 +14,6 @@ import com.example.shop_accounts_system.dto.VendorDueDTO;
 import com.example.shop_accounts_system.entity.Account;
 import com.example.shop_accounts_system.entity.Vendor;
 import com.example.shop_accounts_system.entity.VendorDue;
-import com.example.shop_accounts_system.exception_handling.NotFoundException;
 import com.example.shop_accounts_system.repository.AccountRepository;
 import com.example.shop_accounts_system.repository.VendorDueRepository;
 import com.example.shop_accounts_system.repository.VendorRepository;
@@ -30,6 +30,8 @@ public class VendorDueService {
     @Autowired
     AccountRepository accountRepository;
 
+
+    @Transactional
     public VendorDueDTO addVendorDue(AddVendorDueRequest addVendorDueRequest) throws Exception {
         Vendor vendor = vendorRepository.findById(addVendorDueRequest.getVendorId())
                                         .orElseThrow(()-> new Exception("Vendor was not found with id "+ addVendorDueRequest.getVendorId()));
@@ -51,13 +53,13 @@ public class VendorDueService {
         return VendorDueDTO.fromEntity(newVendorDue);
     }
 
+    @Transactional
     public VendorDueDTO updateVendorDue(String vendorId, UpdateVendorDueRequest request) throws Exception {
         Account account = accountRepository.findById(request.getAccountId())
                                         .orElseThrow(()-> new Exception("Account was not found with id "+ request.getAccountId()));
         
         try {
             VendorDue existingVendorDue = vendorDueRepository.findByVendorId(Integer.parseInt(vendorId));
-            // VendorDue existingVendorDue = vendorDueRepository.findByVendorId(Integer.parseInt(vendorId));
 
             account.setBalance(account.getBalance()-request.getDueClearAmount());
             accountRepository.save(account);

@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shop_accounts_system.dto.AddSalaryRequest;
 import com.example.shop_accounts_system.dto.GetSalaryResponse;
-import com.example.shop_accounts_system.dto.GetStaffResponse;
 import com.example.shop_accounts_system.dto.SalaryDTO;
 import com.example.shop_accounts_system.entity.Account;
 import com.example.shop_accounts_system.entity.Salary;
@@ -29,13 +29,15 @@ public class SalaryService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Transactional
     public SalaryDTO addSalary(AddSalaryRequest addSalaryRequest) throws Exception{
         Staff staff = staffRepository.findById(addSalaryRequest.getStaffId())
                                      .orElseThrow(()-> new Exception("Staff was not fount with staff id "+addSalaryRequest.getStaffId()));
         Account account = accountRepository.findById(addSalaryRequest.getAccountId())
                                            .orElseThrow(()-> new Exception("Account was not fount with id "+addSalaryRequest.getAccountId()));
         int paidSalary = addSalaryRequest.getSalary();
-        account.setBalance(account.getBalance()-paidSalary);                                   
+        account.setBalance(account.getBalance()-paidSalary); 
+        accountRepository.save(account);                                  
         Salary salary = Salary.toEntity(addSalaryRequest,staff,account);
         Salary newSalary = salaryRepository.save(salary);
         return SalaryDTO.fromEntity(newSalary);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shop_accounts_system.dto.AddSellRequest;
 import com.example.shop_accounts_system.dto.GetSellResponse;
@@ -38,6 +39,8 @@ public class SellService {
     @Autowired
     AccountRepository accountRepository;
 
+
+    @Transactional
     public SellDTO addSell(AddSellRequest addSellRequest) throws Exception{
         Shop shop = shopRepository.findById(addSellRequest.getShopId())
                     .orElseThrow(()-> new Exception("No shop was found with shop id "+addSellRequest.getShopId())); 

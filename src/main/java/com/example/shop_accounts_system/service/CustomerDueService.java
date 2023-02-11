@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shop_accounts_system.dto.AddCustomerDueRequest;
 import com.example.shop_accounts_system.dto.CustomerDueDTO;
@@ -13,7 +14,6 @@ import com.example.shop_accounts_system.dto.UpdateCustomerDueRequest;
 import com.example.shop_accounts_system.entity.Account;
 import com.example.shop_accounts_system.entity.Customer;
 import com.example.shop_accounts_system.entity.CustomerDue;
-import com.example.shop_accounts_system.exception_handling.NotFoundException;
 import com.example.shop_accounts_system.repository.AccountRepository;
 import com.example.shop_accounts_system.repository.CustomerDueRepository;
 import com.example.shop_accounts_system.repository.CustomerRespository;
@@ -30,6 +30,7 @@ public class CustomerDueService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Transactional
     public CustomerDueDTO addCustomerDue(AddCustomerDueRequest addCustomerDueRequest)throws Exception{
         Customer customer = customerRespository.findById(addCustomerDueRequest.getCustomerId())
                             .orElseThrow(()-> new Exception("Customer was not found with the id"+addCustomerDueRequest.getCustomerId()));
@@ -47,6 +48,7 @@ public class CustomerDueService {
         return CustomerDueDTO.fromEntity(newCustomerDue);
     }
 
+    @Transactional
     public CustomerDueDTO updateCustomerDue(String customerId, UpdateCustomerDueRequest request) throws Exception {
         Account account = accountRepository.findById(request.getAccountId())
                                             .orElseThrow(()-> new Exception("Account was not found with id "+ request.getAccountId())); 

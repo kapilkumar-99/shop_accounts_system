@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shop_accounts_system.dto.AddPurchaseRequest;
 import com.example.shop_accounts_system.dto.GetPurchaseResponse;
@@ -40,6 +41,7 @@ public class PurchaseService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Transactional
     public PurchaseDTO addPurchase(AddPurchaseRequest addPurchaseRequest) throws Exception{
         Shop shop = shopRepository.findById(addPurchaseRequest.getShopId())
                                   .orElseThrow(()-> new NotFoundException("Shop was not found with id "+ addPurchaseRequest.getShopId()));
@@ -64,7 +66,7 @@ public class PurchaseService {
 
         vendor.setDue(vendor.getDue()+due);
         vendorRepository.save(vendor);
-        
+
         int newQuantity = addPurchaseRequest.getItemQuantity();
         int newPrice = addPurchaseRequest.getTotalAmount();
         int currentQuantity = product.getQuantity();

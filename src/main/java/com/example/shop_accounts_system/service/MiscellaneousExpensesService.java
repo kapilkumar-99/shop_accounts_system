@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shop_accounts_system.dto.AddMiscellaneousExpensesRequest;
 import com.example.shop_accounts_system.dto.GetMiscellaneousExpensesResponse;
@@ -23,17 +24,23 @@ public class MiscellaneousExpensesService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Transactional
     public MiscellaneousExpensesDTO addExpenses(AddMiscellaneousExpensesRequest addMiscellaneousExpensesRequest) throws Exception{
         Account account = accountRepository.findById(addMiscellaneousExpensesRequest.getAccountId())
-                                           .orElseThrow(()-> new Exception("Account was not found with id "+addMiscellaneousExpensesRequest.getAccountId()));                                                                  
+                                           .orElseThrow(()-> new Exception("Account was not found with id "+
+                                           addMiscellaneousExpensesRequest.getAccountId()));
+        account.setBalance(account.getBalance()-addMiscellaneousExpensesRequest.getAmount());
+        accountRepository.save(account);                                                                                                     
         MiscellaneousExpenses miscellaneousExpenses = MiscellaneousExpenses.toEntity(addMiscellaneousExpensesRequest,account);
         MiscellaneousExpenses newMiscellaneousExpenses = miscellaneousExpensesRepository.save(miscellaneousExpenses);
         return MiscellaneousExpensesDTO.fromEntity(newMiscellaneousExpenses);
     }
 
     public GetMiscellaneousExpensesResponse getExpenseById(String id) throws Exception{
-        MiscellaneousExpenses expenses = miscellaneousExpensesRepository.findById(Integer.parseInt(id)).orElseThrow(()-> new Exception("Expense was not found with id "+id));
-       GetMiscellaneousExpensesResponse miscellaneousExpenses = new GetMiscellaneousExpensesResponse(expenses.getAccount().getId(), expenses.getCategory(), expenses.getAmount(),expenses.getDate());
+        MiscellaneousExpenses expenses = miscellaneousExpensesRepository.findById(Integer.parseInt(id))
+                                        .orElseThrow(()-> new Exception("Expense was not found with id "+id));
+       GetMiscellaneousExpensesResponse miscellaneousExpenses = new GetMiscellaneousExpensesResponse(expenses.getAccount().getId(), 
+                                        expenses.getCategory(), expenses.getAmount(),expenses.getDate());
        return miscellaneousExpenses;
     }
 
@@ -41,7 +48,8 @@ public class MiscellaneousExpensesService {
         List<MiscellaneousExpenses> expenses = (List<MiscellaneousExpenses>) miscellaneousExpensesRepository.findAll();
         List<GetMiscellaneousExpensesResponse> allExpense = new ArrayList<>();
         for(MiscellaneousExpenses expense: expenses){
-            GetMiscellaneousExpensesResponse getExpenses = new GetMiscellaneousExpensesResponse(expense.getAccount().getId(), expense.getCategory(), expense.getAmount(),expense.getDate());
+            GetMiscellaneousExpensesResponse getExpenses = new GetMiscellaneousExpensesResponse(expense.getAccount().getId(), 
+                                                        expense.getCategory(), expense.getAmount(),expense.getDate());
             allExpense.add(getExpenses);
         }
         return allExpense;
